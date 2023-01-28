@@ -17,7 +17,7 @@ let movieSchema = mongoose.Schema({
   
   let userSchema = mongoose.Schema({
     Name: {type: String, required:true},
-    UserName: {type: String, required: true},
+    Username: {type: String, required: true},
     Password: {type: String, required: true},
     Email: {type: String, required: true},
     Birthday: Date,
@@ -27,5 +27,5 @@ let movieSchema = mongoose.Schema({
   let Movie = mongoose.model('Movie', movieSchema);
   let User = mongoose.model('User', userSchema);
   
-  module.exports.Movie = Movie;
+  module.exports.Movie = Movie; 
   module.exports.User = User;

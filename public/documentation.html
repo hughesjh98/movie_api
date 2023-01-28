@@ -20,6 +20,8 @@
      <h2>features</h2>
      <ul>
          <li>Return a list of ALL movies to the user</li>
+         <li>return data about a user by username</li>
+         <li>Return a list of ALL the users</li>
          <li>Return data (description, genre, director, image URL, whether its featured or not) about a single movie by title to the user</li>
          <li>Return data about a genre (description) by name/title (e.g., “Thriller”)</li>
          <li>Return data about a director (bio, birth year, death year) by name</li>
@@ -45,7 +47,25 @@
            </tr>
         </thead>
    
-        <tbody>   
+        <tbody> 
+            <tr>
+                <td>Home page of the api</td>
+                <td>/</td>
+                <td>GET</td>
+                <td>-</td>
+                <td>-</td>
+                <td>A brief description about the api</td>
+            </tr>
+
+            <tr>
+                <td>Documentation about this api</td>
+                <td>/documentation</td>
+                <td>GET</td>
+                <td>-</td>
+                <td>-</td>
+                <td>List of endpoint and other documentation about this api</td>
+            </tr>
+
            <tr>
                <td>Get a list of all movies</td>
                <td>/movies</td>
@@ -54,31 +74,49 @@
                <td>-</td>
                <td>A JSON object holding data about all the movies</td>
            </tr>
+
+           <tr>
+            <td>Get a list of all users</td>
+            <td>/users</td>
+            <td>GET</td>
+            <td>-</td>
+            <td>-</td>
+            <td>A JSON object holding data about all the users</td>
+           </tr>
    
            <tr>
                <td>Get a specific movie by title</td>
-               <td>/movies/:title</td>
+               <td>/movies/:Title</td>
                <td>GET</td>
                <td>:title</td>
                <td>-</td>
                <td>A JSON object holding data about a single movie</td>
            </tr>
+
+           <tr>
+            <td>Get a specific user by username</td>
+            <td>/users/:Username</td>
+            <td>GET</td>
+            <td>:Username</td>
+            <td>-</td>
+            <td>A JSON object holding data about a single user</td>
+           </tr>
    
            <tr>
-               <td>Get genre by name</td>
-               <td>/movies/genre/:genreName</td>
+               <td>Get a genre by name</td>
+               <td>/movies/Genre/:Name</td>
                <td>GET</td>
                <td>:Name</td>
-               <td>-</td>
+               <td>{'Genre.Name':req.params.Name}</td>
                <td>A JSON object holding data about the genre of a movie</td>
            </tr>
    
            <tr>
-               <td>Get director data by name</td>
-               <td>/movies/director/:directorName</td>
+               <td>Get director by name</td>
+               <td>/movies/Director/:Name</td>
                <td>GET</td>
-               <td>:name</td>
-               <td>-</td>
+               <td>:Name</td>
+               <td>{'Director.Name':req.params.Name}</td>
                <td>A JSON object holding data about the data of a director</td>
            </tr>
 
@@ -87,45 +125,45 @@
                <td>/users</td>
                <td>POST</td>
                <td>-</td>
-               <td>A JSON object holding data about the users to add, structured like this { "name" : "deven", "Password": "1234", "Email": ""deven27@gmail.com", "Birthday": "05-06-1999" } </td>
-               <td>A JSON object holding data about the user that was added, structured like this { "name" : "deven", "Password": "1234", "Email": "devon27@gmail.com", "Birthday": "05-06-1999" } including an ID </td>
+               <td>A JSON object holding data about the users to add, structured like this { "name" : "deven", "Username" : "Deven432", "Password" : "1234", "Email" : ""deven27@gmail.com", "Birthday" : "05-06-1999" } </td>
+               <td>A JSON object holding data about the user that was added, structured like this { "name" : "deven", "Username" : "Deven432", "Password" : "1234", "Email" : "devon27@gmail.com", "Birthday" : "05-06-1999" } including an ID </td>
            </tr>
    
            <tr>
                <td>Allow new users update their user info</td>
-               <td>/users/:id</td>
+               <td>/users/:Username</td>
                <td>PUT</td>
-               <td>:id</td>
-               <td>-</td>
-               <td>A JSON object holding data about the updated information</td>
+               <td>:Username</td>
+               <td>{Username: req.params.Username}</td>
+               <td>A JSON object holding data about the updated information ex.{ $set: {Name:"Sarah} }</td>
            </tr>
    
            
            <tr>
-               <td>Add movie to favorite list</td>
-               <td>/users/:id/:movieTitle</td>
+               <td>Add movie to users FavoriteMovies list</td>
+               <td>/users/:Username/movies/:MovieID</td>
                <td>POST</td>
-               <td>:id, :movieTitle</td>
-               <td>-</td>
-               <td>A JSON Object holding data about the User and the movie that was added</td>
+               <td>:Username, :MovieID</td> 
+               <td>{Username: req.params.Username}, {FavoriteMovies: req.params.MovieID}</td>
+               <td>A JSON Object holding data about the User and the movie that was added ex. {$push: {FavoriteMovies: _id: ObjectId("2763613")} }</td>
            </tr>
    
            <tr>
                <td>Delete movie from favorite list</td>
-               <td>/users/:id/:movieTitle</td>
+               <td>/users/:Username/movies/:MovieID</td>
                <td>DELETE</td>
-               <td>:id, :movieTitle</td>
-               <td>-</td>
-               <td>A JSON Object holding data about the User and the movie that was removed</td>
+               <td>:Username, :MovieID</td>
+               <td>{Username: req.params.Username},{FavoriteMovies: req.params.MovieID}</td>
+               <td>A JSON Object holding data about the User and the movie that was removed ex. {$pull: {FavoriteMovies: _id:ObjectId("kjas2212")}}</td>
            </tr>
    
            <tr>
                <td>Allow existing users to deregister</td>
-               <td>/users/:id</td>
+               <td>/users/:Username</td>
                <td>DELETE</td>
-               <td>:id</td>
-               <td>-</td>
-               <td>A text message indicating whether the User has deregistered</td>
+               <td>:Username</td>
+               <td>{ Username: req.params.Username }</td>
+               <td>A text message indicating whether the User has deregistered ex.(req.params.Username + 'was deleted') </td>
            </tr>
         </tbody>
        </table>
