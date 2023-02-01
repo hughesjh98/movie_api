@@ -21,6 +21,11 @@ app.use(morgan("common"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+let auth = require('./auth.js')(app);
+const passport = require('passport');
+require('./passport');
+
+
 app.get('/', (req, res) => {
   res.send("Welcome to my movie app where you can find movies that were the most popular when they came out");
 });
@@ -99,7 +104,7 @@ app.put('/users/:Username', (req, res) => {
 });
 
 //POST A MOVIE TO A USERS ARRAY OF FAVORITE MOVIES
-app.post('/users/:Username/movies/:MovieID', (req, res) => {
+app.post('/users/:Username/movies/:MovieID', async (req, res) => {
 Users.findOneAndUpdate({Username: req.params.Username},
     { 
         $push: {FavoriteMovies: req.params.MovieID}
@@ -150,7 +155,7 @@ app.delete('/users/:Username', (req, res) => {
   });
 
 //READ ALL OF THE MOVIES IN THE DATABASE
-app.get('/movies', (_req, res) => {
+app.get('/movies', passport.authenticate('jwt', {session: false}), (_req, res) => {
     Movies.find()
     .then((movies) => {
         res.status(201).json(movies);
