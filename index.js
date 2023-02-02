@@ -57,27 +57,34 @@ app.post('/users', async (req, res) => {
 });
 
 //GET ALL OF THE USERS
-app.get('/users', passport.authenticate('jwt', {session: false}), (req, res) => {
-    Users.find()
-      .then((users) => {
+app.get('/users', passport.authenticate('jwt', {session: false}), async(req, res) => {
+    try{
+    const users = await Users.find()
+      if (users) {
         res.status(201).json(users);
-      })
-      .catch((err) => {
+      }
+    } catch (err) {
         console.error(err);
         res.status(500).send('Error: ' + err);
-      });
+      };
   });
 
 //GET USER BY USERNAME 
-app.get('/users/:Username', passport.authenticate('jwt', {session: false}), (req, res) => {
-    Users.findOne({ Username: req.params.Username })
-      .then((user) => {
-        res.json(user);
-      })
-      .catch((err) => {
+app.get('/users/:Username', passport.authenticate('jwt', {session: false}), async (req, res) => {
+    try {
+        const {Username} = req.params;
+
+    const user = await Users.findOne({Username});
+
+      if(user) {
+        res.status(201).json(user);
+      }else{
+        throw `${Username} can't be found`;
+      }
+    } catch(err) {
         console.error(err);
         res.status(500).send('Error: ' + err);
-      });
+      };
   });
   
 
@@ -139,44 +146,55 @@ app.delete('/users/:Username/movies/:MovieID', passport.authenticate('jwt', {ses
 })
 
 //DELETE USERS 
-app.delete('/users/:Username', passport.authenticate('jwt', {session: false}), (req, res) => {
-    Users.findOneAndRemove({ Username: req.params.Username })
-      .then((user) => {
-        if (!user) {
-          res.status(400).send(req.params.Username + ' was not found');
+app.delete('/users/:Username', passport.authenticate('jwt', {session: false}),  async (req, res) => {
+    try {
+    const {Username} = req.params;
+
+    const user = await Users.findOneAndRemove({Username});
+
+      if(!user) {
+          throw `${Username} was not found`;
         } else {
-          res.status(200).send(req.params.Username + ' was deleted.');
+          res.status(200).send(`${Username} was deleted.`);
         }
-      })
-      .catch((err) => {
+    } catch(err)  {
         console.error(err);
         res.status(500).send('Error: ' + err);
-      });
+      };
   });
 
 //READ ALL OF THE MOVIES IN THE DATABASE
-app.get('/movies', passport.authenticate('jwt', {session: false}), (_req, res) => {
-    Movies.find()
-    .then((movies) => {
-        res.status(201).json(movies);
-    })
-    .catch((error) =>{
-        console.error(error);
-        res.status(500).send('error:' + error);
-    });
-})
+app.get('/movies', passport.authenticate('jwt', {session: false}), async (_req, res) => {
+    try {
+        const movies = await Movies.find()
+
+          if (movies) {
+            res.status(201).json(movies);
+          }
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Error: ' + err);
+          };
+      });
 
 //READ MOVIES BY THE TITLE 
-app.get('/movies/:Title', passport.authenticate('jwt', {session: false}), (req, res) => {
-    Movies.findOne({Title: req.params.Title})
-    .then((movie) => {
-        res.json(movie);
-    }) 
-    .catch((error) =>{
-        console.error(error);
-        res.status(500).send('error: ', error);
-    })
-})
+app.get('/movies/:Title', passport.authenticate('jwt', {session: false}), async (req, res) => {
+    try {
+        const {Title} = req.params;
+
+    const movie = await Movies.findOne({Title});
+
+      if(movie) {
+        res.status(201).json(movie);
+      }else {
+        throw  `${Title} can't be found`;
+      }
+
+    } catch(err) {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+      };
+  });
 
 //GET A GENRE BY NAME 
 app.get('/movies/Genre/:Name', passport.authenticate('jwt', {session: false}), (req, res) => {
