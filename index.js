@@ -22,8 +22,24 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 let auth = require('./auth.js')(app);
+const cors = require('cors');
+app.use(cors());
 const passport = require('passport');
 require('./passport');
+const { check, validationResult } = require('express-validator');
+
+let allowOrgins = ['http://localhost:8080', 'http://testsite.com'];
+
+app.use(cors({
+    origin: (origin, callback) =>{
+        if(!origin) return callback(null, true);
+        if(allowOrgins.indexOf === -1) {
+            let message = 'The CORS policy for this application doesn\'t allow access from origin ' + origin;
+            return callback(new Error(message), false);
+        }
+        return callback(null,true);
+    }
+}));
 
 
 app.get('/', (req, res) => {
@@ -31,8 +47,23 @@ app.get('/', (req, res) => {
 });
 
 //CREATE NEW USERS & USERS ID 
-app.post('/users', async (req, res) => {
+app.post('/users', [
+    //validation 
+    check('Username', 'Username is required').isLength({min: 5}),
+    check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+    check('Password', 'Password is required').not().isEmpty(),
+    check('Email', 'Email does not appear to be valid').isEmail()
+],
+
+ async (req, res) => {
+
     try {
+        let errors = validationResult(req);
+        if (!errors.isEmpty()){
+            return res.status(422).json({errors: errors.array()})
+        }
+        let hashedPassword = Users.hashPassword(req.body.Password);
+
         const { Username, Name, Password, Email, Birthday } = req.body;
 
         const findUser = await Users.findOne({ Username });
@@ -42,7 +73,7 @@ app.post('/users', async (req, res) => {
         const newUser = new Users({
             Name,
             Username,
-            Password,
+            Password: hashedPassword,
             Email,
             Birthday: Birthday
         });
@@ -89,7 +120,19 @@ app.get('/users/:Username', passport.authenticate('jwt', {session: false}), asyn
   
 
 //UPDATE USERS NAME 
-app.put('/users/:Username', (req, res) => {
+app.put('/users/:Username',[
+    //validation 
+    check('Username', 'Username is required').isLength({min: 5}),
+    check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+    check('Password', 'Password is required').not().isEmpty(),
+    check('Email', 'Email does not appear to be valid').isEmail()
+],
+ (req, res) => {
+    let errors = validationResult(req);
+    if (!errors.isEmpty()){
+        return res.status(422).json({errors: errors.array()})
+    }
+    
     Users.findOneAndUpdate({Username: req.params.Username}, 
         { $set: {
         Name: req.body.Name,
@@ -229,6 +272,7 @@ app.use((err, _req, res, _next) => {
     res.status(500).send('Something broke!');
   });
 
-app.listen(8080, () => {
-  console.log('Your app is listening on port 8080.');
+  const port = process.env.PORT || 8080;
+app.listen(port,'0.0.0.0', () => {
+  console.log('lisenting on port ' + port);
 });
