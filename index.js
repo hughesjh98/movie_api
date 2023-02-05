@@ -12,8 +12,9 @@ const Models = require('./models.js');
 const Movies = Models.Movie;
 const Users = Models.User;
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {flags: 'a'});
-mongoose.connect('mongodb://localhost:27017/myFlixDB', {
-    useNewUrlParser: true, useUnifiedTopology: true});
+// mongoose.connect('mongodb://localhost:27017/myFlixDB', {
+//     useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.use(morgan('combined', {stream: accessLogStream}));
 app.use(express.static('public'));
@@ -276,3 +277,7 @@ app.use((err, _req, res, _next) => {
   app.listen(port, '0.0.0.0',() => {
    console.log('Listening on Port ' + port);
   });
+
+
+
+  
