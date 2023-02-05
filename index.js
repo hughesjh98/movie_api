@@ -14,7 +14,7 @@ const Users = Models.User;
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {flags: 'a'});
 // mongoose.connect('mongodb://localhost:27017/myFlixDB', {
 //     useNewUrlParser: true, useUnifiedTopology: true});
-mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+ mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.use(morgan('combined', {stream: accessLogStream}));
 app.use(express.static('public'));
