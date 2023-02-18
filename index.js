@@ -82,7 +82,7 @@ app.post('/users', [
         if (!saveUser) {
             throw 'Failed to save the user';
         }
-        return res.status(201).json(saveUser);
+        return res.status(200).json(saveUser);
     } catch(error) {
         res.status(400).send('Error: ' + error)
     } 
@@ -208,7 +208,7 @@ app.delete('/users/:Username', passport.authenticate('jwt', {session: false}),  
   });
 
 //READ ALL OF THE MOVIES IN THE DATABASE
-app.get('/movies', passport.authenticate('jwt', {session: false}), async (_req, res) => {
+app.get('/movies', async (_req, res) => {
     try {
         const movies = await Movies.find()
 
