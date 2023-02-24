@@ -29,7 +29,7 @@ const passport = require('passport');
 require('./passport');
 const { check, validationResult } = require('express-validator');
 
-  let allowOrgins = [ 'http://localhost:8080', 'http://localhost:1234', 'https://movie-dash.herokuapp.com/' ];
+  let allowOrgins = [ 'http://localhost:8080', 'http://localhost:1234', 'https://movie-dash.herokuapp.com/','https://movie-dash.herokuapp.com/login'  ];
 
 
 app.use(cors({
