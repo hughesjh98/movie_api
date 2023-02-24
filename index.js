@@ -22,16 +22,8 @@ app.use(morgan("common"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-let auth = require('./auth.js')(app);
 const cors = require('cors');
-//  app.use(cors());
-const passport = require('passport');
-require('./passport');
-const { check, validationResult } = require('express-validator');
-
-  let allowOrgins = [ 'http://localhost:8080', 'http://localhost:1234', 'https://movie-dash.herokuapp.com/','https://movie-dash.herokuapp.com/login'  ];
-
-
+let allowOrgins = [ 'http://localhost:8080', 'http://localhost:1234', 'https://movie-dash.herokuapp.com/','https://movie-dash.herokuapp.com/login'];
 app.use(cors({
     origin: (origin, callback) =>{
         if(!origin) return callback(null, true);
@@ -42,6 +34,12 @@ app.use(cors({
         return callback(null,true);
     }
 }));
+
+let auth = require('./auth.js')(app);
+const passport = require('passport');
+require('./passport');
+const { check, validationResult } = require('express-validator');
+
 
 
 app.get('/', (req, res) => {
