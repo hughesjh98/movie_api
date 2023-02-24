@@ -23,25 +23,25 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 let auth = require('./auth.js')(app);
-// const cors = require('cors');
-//  app.use(cors());
+const cors = require('cors');
+ app.use(cors());
 const passport = require('passport');
 require('./passport');
 const { check, validationResult } = require('express-validator');
 
-//   let allowOrgins = ['http://localhost:8080','https://movie-dash.herokuapp.com/movies', 'https://movie-dash.herokuapp.com/', 'http://localhost:1234/login','http://localhost/','http://localhost:1234'];  
+  let allowOrgins = ['http://localhost:8080','https://movie-dash.herokuapp.com/movies', 'https://movie-dash.herokuapp.com/', 'http://localhost:1234/login','http://localhost/','http://localhost:1234'];  
 
 
-// app.use(cors({
-//     origin: (origin, callback) =>{
-//         if(!origin) return callback(null, true);
-//         if(allowOrgins.indexOf === -1) {
-//             let message = 'The CORS policy for this application doesn\'t allow access from origin ' + origin;
-//             return callback(new Error(message), false);
-//         }
-//         return callback(null,true);
-//     }
-// }));
+app.use(cors({
+    origin: (origin, callback) =>{
+        if(!origin) return callback(null, true);
+        if(allowOrgins.indexOf === -1) {
+            let message = 'The CORS policy for this application doesn\'t allow access from origin ' + origin;
+            return callback(new Error(message), false);
+        }
+        return callback(null,true);
+    }
+}));
 
 
 app.get('/', (req, res) => {
