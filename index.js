@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 let auth = require('./auth.js')(app);
 const cors = require('cors');
- app.use(cors());
+//  app.use(cors());
 const passport = require('passport');
 require('./passport');
 const { check, validationResult } = require('express-validator');
