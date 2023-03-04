@@ -127,17 +127,19 @@ app.put('/users/:Username',[
     check('Password', 'Password is required').not().isEmpty(),
     check('Email', 'Email does not appear to be valid').isEmail()
 ],
+
  (req, res) => {
     let errors = validationResult(req);
     if (!errors.isEmpty()){
         return res.status(422).json({errors: errors.array()})
     }
-    
+    let hashedPassword = Users.hashPassword(req.body.Password);
+
     Users.findOneAndUpdate({Username: req.params.Username}, 
         { $set: {
         Name: req.body.Name,
         Username: req.body.Username,
-        Password: req.body.Password,
+        Password: hashedPassword,
         Email: req.body.Email,
         Birthday: req.body.Birthday
         }
