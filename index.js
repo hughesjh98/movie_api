@@ -173,7 +173,7 @@ Users.findOneAndUpdate({Username: req.params.Username},
 });
 
 //DELETE A MOVIE FROM THE USERS ARRAY OF FAVORITE MOVIES
-app.delete('/users/:Username/movies/:Title', passport.authenticate('jwt', {session: false}), (req, res) => {
+app.delete('/users/:Username/movies/:Id', passport.authenticate('jwt', {session: false}), (req, res) => {
     Users.findOneAndUpdate({Username: req.params.Username},
         {
             $pull: {FavoriteMovies: req.params.Title}
