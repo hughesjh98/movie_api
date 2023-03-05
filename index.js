@@ -156,7 +156,7 @@ app.put('/users/:Username',[
 });
 
 //POST A MOVIE TO A USERS ARRAY OF FAVORITE MOVIES
-app.post('/users/:Username/movies/:Title', passport.authenticate('jwt', {session: false}), (req, res) => {
+app.post('/users/:Username/movies/:Id', passport.authenticate('jwt', {session: false}), (req, res) => {
 Users.findOneAndUpdate({Username: req.params.Username},
     { 
         $push: {FavoriteMovies: req.params.Title}
