@@ -5,7 +5,6 @@ const fs = require('fs');
 
 const path = require('path');
 const bodyParser = require('body-parser');
-const uuid = require('uuid');
 
 const mongoose = require('mongoose');
 const Models = require('./models.js');
@@ -23,7 +22,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const cors = require('cors');
-let allowOrgins = [ 'http://localhost:8080', 'http://localhost:1234', 'https://movie-dash.herokuapp.com/','https://movie-dash.herokuapp.com/login'];
+let allowOrgins = [ 'http://localhost:8080', 'http://localhost:1234', 'https://movie-dash.herokuapp.com/','https://movie-dash.herokuapp.com/login','https://movie-dash.netlify.app'];
 app.use(cors({
     origin: (origin, callback) =>{
         if(!origin) return callback(null, true);
