@@ -22,7 +22,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const cors = require('cors');
-let allowOrgins = [ 'http://localhost:8080', 'http://localhost:1234', 'https://movie-dash.herokuapp.com/','https://movie-dash.herokuapp.com/login','https://movie-dash.netlify.app'];
+let allowOrgins = [ 'http://localhost:8080', 'http://localhost:1234', 'https://movie-dash.herokuapp.com/','https://movie-dash.herokuapp.com/login','https://movie-dash.netlify.app','http://localhost:4200'];
 app.use(cors({
     origin: (origin, callback) =>{
         if(!origin) return callback(null, true);
