@@ -199,7 +199,7 @@ app.delete('/users/:Username', passport.authenticate('jwt', {session: false}),  
       if(!user) {
           throw `${Username} was not found`;
         } else {
-          res.status(200).send(`${Username} was deleted.`);
+          res.status(200).json(`${Username} was deleted.`);
         }
     } catch(err)  {
         console.error(err);
